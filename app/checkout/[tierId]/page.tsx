@@ -1,8 +1,7 @@
 import { requireAuth } from '@/lib/supabase/auth'
 import { getTier, createInvoice } from '@/lib/supabase/db-actions'
 import { createServerClientComponent } from '@/lib/supabase/server'
-import QRCode from 'qrcode.react'
-import { Clock } from 'lucide-react'
+import { Clock, QrCode } from 'lucide-react'
 import CountdownTimer from './components/CountdownTimer'
 
 export default async function CheckoutPage({ params }: { params: { tierId: string } }) {
@@ -68,16 +67,21 @@ export default async function CheckoutPage({ params }: { params: { tierId: strin
               Payment Instructions
             </h2>
             <p className="text-slate-400 text-sm mb-4">
-              Scan the QR code below to complete your payment using Saya Bayar QRIS.
+              Click the button below to complete your payment using Saya Bayar QRIS.
             </p>
 
-            <div className="flex justify-center mb-4">
-              <div className="bg-white p-4 rounded-lg">
-                <QRCode value={invoice.qris_string} size={200} />
-              </div>
-            </div>
+            <a
+              href={invoice.payment_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors mb-4"
+            >
+              <QrCode className="w-5 h-5" />
+              Open Payment Page
+            </a>
 
-            <div className="flex justify-center mb-4">
+            <div className="bg-slate-900 p-4 rounded-lg mb-4">
+              <p className="text-sm text-slate-400 mb-2">Or scan manually:</p>
               <p className="text-sm text-slate-300 font-mono break-all">
                 {invoice.qris_string}
               </p>
