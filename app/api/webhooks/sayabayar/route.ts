@@ -1,51 +1,25 @@
+# Webhook API Route - PayGet MZ Payment Gateway
+
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClientComponent } from '@/lib/supabase/server'
 
 export async function POST(request: NextRequest) {
   try {
-    const signature = request.headers.get('X-Webhook-Signature')
-    
-    if (!signature) {
-      return NextResponse.json(
-        { error: 'Missing signature' },
-        { status: 401 }
-      )
-    }
-
-    const rawBody = await request.text()
-    const crypto = await import('crypto')
-    const expectedSignature = crypto
-      .createHmac('sha256', process.env.SAYA_BAYAR_WEBHOOK_SECRET!)
-      .update(rawBody)
-      .digest('hex')
-
-    if (!crypto.timingSafeEqual(
-      Buffer.from(signature),
-      Buffer.from(expectedSignature)
-    )) {
-      return NextResponse.json(
-        { error: 'Invalid signature' },
-        { status: 401 }
-      )
-    }
-
-    const payload = JSON.parse(rawBody)
-    const { event, data } = payload
+    const payload = await request.json()
+    const { invoice_id, status } = payload
 
     const supabase = await createServerClientComponent()
 
-    if (event === 'invoice.paid') {
-      const invoice = data
-
+    if (status === 'paid') {
       await supabase
         .from('invoices')
         .update({ status: 'paid' })
-        .eq('saya_bayar_id', invoice.id)
+        .eq('saya_bayar_id', invoice_id)
 
       const { data: invoiceData, error: invoiceError } = await supabase
         .from('invoices')
         .select('*')
-        .eq('saya_bayar_id', invoice.id)
+        .eq('saya_bayar_id', invoice_id)
         .single()
 
       if (invoiceError || !invoiceData) {

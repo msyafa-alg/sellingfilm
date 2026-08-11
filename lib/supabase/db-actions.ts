@@ -58,42 +58,28 @@ export async function createInvoice(
 ) {
   'use server'
 
-  const { SayaBayarClient } = await import('@/lib/saya-bayar/client')
-  const sayaBayar = new SayaBayarClient(process.env.SAYA_BAYAR_API_KEY!)
+  const { PayGetClient } = await import('@/lib/payget/client')
+  const payGet = new PayGetClient(process.env.PAYGET_API_KEY!)
   
   const supabase = await createServerClientComponent()
 
-  const redirectUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/payment/success`
-
-  const invoiceData = {
-    customer_name: user.full_name,
-    customer_email: user.email,
-    amount: tier.price,
-    description: `Pembelian Tier ${tier.name} - lordarky.syafapnl.biz.id`,
-    channel_preference: 'client' as const,
-    payment_method: 'qris' as const,
-    redirect_url: redirectUrl,
-  }
-
-  const response = await sayaBayar.createInvoice(invoiceData)
+  const response = await payGet.createInvoice(tier.price)
 
   if (!response.success) {
     throw new Error('Failed to create invoice')
   }
 
-  const invoice = response.data
-
   const { error: insertError } = await supabase
     .from('invoices')
     .insert({
-      saya_bayar_id: invoice.id,
-      invoice_number: invoice.invoice_number,
+      saya_bayar_id: response.invoice_id,
+      invoice_number: response.invoice_id,
       user_id: user.id,
       tier_id: tier.id,
-      amount: invoice.amount,
+      amount: response.amount,
       status: 'pending',
-      qris_string: invoice.payment_channel.qris_string,
-      payment_url: invoice.payment_channel.payment_url,
+      qris_string: response.qris_image,
+      payment_url: response.payment_link,
     })
     .select()
     .single()
@@ -103,11 +89,11 @@ export async function createInvoice(
   }
 
   return {
-    id: invoice.id,
-    invoice_number: invoice.invoice_number,
-    qris_string: invoice.payment_channel.qris_string,
-    payment_url: invoice.payment_channel.payment_url,
-    expires_at: invoice.expires_at,
+    id: response.invoice_id,
+    invoice_number: response.invoice_id,
+    qris_string: response.qris_image,
+    payment_url: response.payment_link,
+    expires_at: response.expired_at,
   }
 }
 
