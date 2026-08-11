@@ -1,7 +1,5 @@
-// Middleware for Authentication Protection
-
-import { createServerClient } from '@/lib/supabase/server'
 import { NextResponse, type NextRequest } from 'next/server'
+import { createServerClientComponent } from '@/lib/supabase/server'
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({
@@ -10,28 +8,7 @@ export async function middleware(request: NextRequest) {
     },
   })
 
-  const supabase = createServerClient({
-    url: process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    apiKey: process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    cookies: {
-      getAll() {
-        return request.cookies.getAll()
-      },
-      setAll(cookiesToSet) {
-        cookiesToSet.forEach(({ name, value }) => {
-          request.cookies.set(name, value)
-        })
-        response = NextResponse.next({
-          request: {
-            headers: request.headers,
-          },
-        })
-        cookiesToSet.forEach(({ name, value, options }) => {
-          response.cookies.set(name, value, options)
-        })
-      },
-    },
-  })
+  const supabase = await createServerClientComponent()
 
   const { data: { user } } = await supabase.auth.getUser()
 
