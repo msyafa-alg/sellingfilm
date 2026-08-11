@@ -1,7 +1,23 @@
+'use client'
+
 import Link from 'next/link'
 import { LogOut } from 'lucide-react'
+import { useUser } from '@/lib/supabase/hooks'
+import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
 
 export default function Navbar() {
+  const { user } = useUser()
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    const supabase = createClient()
+    if (!supabase) return
+    await supabase.auth.signOut()
+    router.push('/')
+    router.refresh()
+  }
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-slate-800 bg-slate-950/80 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -13,18 +29,38 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center gap-4">
-            <Link 
-              href="/login" 
-              className="text-sm font-medium text-slate-300 hover:text-white transition-colors"
-            >
-              Login
-            </Link>
-            <Link 
-              href="/signup" 
-              className="text-sm font-medium bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors"
-            >
-              Sign Up
-            </Link>
+            {user ? (
+              <div className="flex items-center gap-4">
+                <Link
+                  href="/dashboard"
+                  className="text-sm font-medium text-slate-300 hover:text-white transition-colors"
+                >
+                  Dashboard
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 text-sm font-medium text-slate-300 hover:text-white transition-colors"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-4">
+                <Link
+                  href="/login"
+                  className="text-sm font-medium text-slate-300 hover:text-white transition-colors"
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/signup"
+                  className="text-sm font-medium bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors"
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>
