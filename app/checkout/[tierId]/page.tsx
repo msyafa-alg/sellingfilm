@@ -4,8 +4,9 @@ import { createServerClientComponent } from '@/lib/supabase/server'
 import { Clock, QrCode } from 'lucide-react'
 import CountdownTimer from './components/CountdownTimer'
 
-export default async function CheckoutPage({ params }: { params: { tierId: string } }) {
-  const tier = await getTier(params.tierId)
+export default async function CheckoutPage({ params }: { params: Promise<{ tierId: string }> }) {
+  const { tierId } = await params
+  const tier = await getTier(tierId)
 
   if (!tier) {
     return (
