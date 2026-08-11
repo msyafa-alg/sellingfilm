@@ -78,13 +78,13 @@ export async function signUp(formData: FormData) {
   })
 
   if (error) {
-    throw new Error(error.message)
+    console.error('Signup error:', error)
+    throw new Error(error.message.includes('already registered') || error.message.includes('User already') 
+      ? 'Email sudah terdaftar, silakan login.' 
+      : error.message)
   }
 
-  if (data.user) {
-    redirect('/login')
-  }
-
+  // Jika email confirmation diaktifkan, user harus konfirmasi via email
   redirect('/login')
 }
 
