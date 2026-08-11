@@ -20,3 +20,17 @@ export async function createServerClientComponent() {
     }
   )
 }
+
+export async function getPendingInvoice(userId: string, tierId: string) {
+  const supabase = await createServerClientComponent()
+  const { data: invoice, error } = await supabase
+    .from('invoices')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('tier_id', tierId)
+    .eq('status', 'pending')
+    .order('created_at', { ascending: false })
+    .single()
+  if (error && error.code !== 'PGRST116') return null
+  return invoice
+}
