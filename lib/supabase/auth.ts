@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 import { createServerClientComponent } from '@/lib/supabase/server'
 
 export async function requireAuth() {
-  const supabase = createServerClientComponent()
+  const supabase = await createServerClientComponent()
 
   const { data: { user }, error } = await supabase.auth.getUser()
 
@@ -14,7 +14,7 @@ export async function requireAuth() {
 }
 
 export async function requireActiveSubscription(tierId: string) {
-  const supabase = createServerClientComponent()
+  const supabase = await createServerClientComponent()
 
   const { data: { user }, error: userError } = await supabase.auth.getUser()
 
