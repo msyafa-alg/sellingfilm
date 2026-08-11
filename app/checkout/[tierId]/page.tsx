@@ -18,7 +18,7 @@ export default async function CheckoutPage({ params }: { params: Promise<{ tierI
 
   const user = await requireAuth()
 
-  const supabase = createServerClientComponent()
+  const supabase = await createServerClientComponent()
   const { data: profile } = await supabase
     .from('profiles')
     .select('*')

@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 export default async function PaymentSuccessPage({ searchParams }: { searchParams: Promise<{ invoice_id?: string }> }) {
   const { invoice_id } = await searchParams
-  const supabase = createServerClientComponent()
+  const supabase = await createServerClientComponent()
 
   if (invoice_id) {
     const { data: invoice } = await supabase

@@ -9,7 +9,7 @@ import { Calendar, Clock, ArrowRight, Users, Mail, Check } from 'lucide-react'
 export default async function DashboardPage() {
   const user = await requireAuth()
 
-  const supabase = createServerClientComponent()
+  const supabase = await createServerClientComponent()
   
   const { data: subscription } = await supabase
     .from('subscriptions')
