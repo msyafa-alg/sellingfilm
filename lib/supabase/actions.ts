@@ -3,8 +3,8 @@ import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
 import { Database } from '@/types/supabase'
 
-function createClientWithCookies() {
-  const cookieStore = cookies()
+async function createClientWithCookies() {
+  const cookieStore = await cookies()
 
   return createBrowserClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -34,7 +34,7 @@ export async function signIn(formData: FormData) {
     throw new Error('Email and password are required')
   }
 
-  const supabase = createClientWithCookies()
+  const supabase = await createClientWithCookies()
 
   const { error } = await supabase.auth.signInWithPassword({
     email,
@@ -59,7 +59,7 @@ export async function signUp(formData: FormData) {
     throw new Error('All fields are required')
   }
 
-  const supabase = createClientWithCookies()
+  const supabase = await createClientWithCookies()
 
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -85,7 +85,7 @@ export async function signUp(formData: FormData) {
 export async function signOut() {
   'use server'
 
-  const supabase = createClientWithCookies()
+  const supabase = await createClientWithCookies()
   await supabase.auth.signOut()
   redirect('/')
 }
