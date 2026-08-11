@@ -1,4 +1,4 @@
-# Navbar Component
+// Navbar Component
 
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'

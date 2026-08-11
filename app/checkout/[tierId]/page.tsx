@@ -1,4 +1,4 @@
-# Checkout Page
+// Checkout Page
 
 import { requireAuth } from '@/lib/supabase/auth'
 import { getTier, createInvoice } from '@/lib/supabase/db-actions'

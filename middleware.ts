@@ -1,4 +1,4 @@
-# Middleware for Authentication Protection
+// Middleware for Authentication Protection
 
 import { createServerClient } from '@/lib/supabase/server'
 import { NextResponse, type NextRequest } from 'next/server'

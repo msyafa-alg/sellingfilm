@@ -1,4 +1,4 @@
-# Pricing Section Component
+// Pricing Section Component
 
 import Link from 'next/link'
 import { Check } from 'lucide-react'

@@ -1,5 +1,5 @@
-# Supabase Client Setup
-# Browser client for client-side operations
+// Supabase Client Setup
+// Browser client for client-side operations
 import { createBrowserClient } from '@supabase/ssr'
 import { Database } from '@/types/supabase'
 

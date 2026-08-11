@@ -1,4 +1,4 @@
-# Login Page
+// Login Page
 
 import { signIn } from '@/lib/supabase/actions'
 import Link from 'next/link'

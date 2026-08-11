@@ -1,4 +1,4 @@
-# Hero Section Component
+// Hero Section Component
 
 import Link from 'next/link'
 import { BookOpen, Code, Trophy, Zap } from 'lucide-react'

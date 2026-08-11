@@ -1,4 +1,4 @@
-# Course/Video Player Page
+// Course/Video Player Page
 
 import { requireActiveSubscription } from '@/lib/supabase/auth'
 import { createServerClientComponent } from '@/lib/supabase/server'

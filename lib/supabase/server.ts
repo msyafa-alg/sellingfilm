@@ -1,4 +1,4 @@
-# Server-side Supabase Client for server actions and API routes
+// Server-side Supabase Client for server actions and API routes
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { Database } from '@/types/supabase'

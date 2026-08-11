@@ -1,4 +1,4 @@
-# Payment Success Page
+// Payment Success Page
 
 import { redirect } from 'next/navigation'
 import { createServerClientComponent } from '@/lib/supabase/server'

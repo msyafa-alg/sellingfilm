@@ -1,4 +1,4 @@
-# Auth UI Components
+// Auth UI Components
 
 import { createClient } from '@/lib/supabase/client'
 import { redirect } from 'next/navigation'

@@ -1,4 +1,4 @@
-# Features Section Component
+// Features Section Component
 
 import { Check, Code, Video, BookOpen, Users } from 'lucide-react'
 

@@ -1,4 +1,4 @@
-# Logout Route
+// Logout Route
 
 import { signOut } from '@/lib/supabase/actions'
 

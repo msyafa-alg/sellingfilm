@@ -1,4 +1,4 @@
-# Header Component
+// Header Component
 
 import Link from 'next/link'
 import { User, LogOut } from 'lucide-react'

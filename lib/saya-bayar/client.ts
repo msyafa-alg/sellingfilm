@@ -1,4 +1,4 @@
-# Saya Bayar API Client
+// Saya Bayar API Client
 export interface SayaBayarCreateInvoiceRequest {
   customer_name: string
   customer_email: string

@@ -1,4 +1,4 @@
-# Payment API Routes
+// Payment API Routes
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClientComponent } from '@/lib/supabase/server'

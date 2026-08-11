@@ -1,4 +1,4 @@
-# Dashboard Page
+// Dashboard Page
 
 import { requireAuth } from '@/lib/supabase/auth'
 import { createServerClientComponent } from '@/lib/supabase/server'
