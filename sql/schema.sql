@@ -76,6 +76,14 @@ CREATE POLICY "Users can read own invoices"
   ON invoices FOR SELECT
   USING (auth.uid() = user_id);
 
+CREATE POLICY "Users can insert own invoices"
+  ON invoices FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update own invoices"
+  ON invoices FOR UPDATE
+  USING (auth.uid() = user_id);
+
 CREATE POLICY "Service role can manage invoices"
   ON invoices FOR ALL
   USING (auth.role() = 'service_role');
