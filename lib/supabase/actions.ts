@@ -76,7 +76,7 @@ export async function signUp(formData: FormData) {
   }
 
   if (data.user) {
-    redirect('/login?message=check-email')
+    redirect('/login')
   }
 
   redirect('/login')
