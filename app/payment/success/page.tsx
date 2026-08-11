@@ -1,18 +1,17 @@
-// Payment Success Page
-
 import { redirect } from 'next/navigation'
 import { createServerClientComponent } from '@/lib/supabase/server'
 import { CheckCircle, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 
-export default async function PaymentSuccessPage({ searchParams }: { searchParams: { invoice_id?: string } }) {
+export default async function PaymentSuccessPage({ searchParams }: { searchParams: Promise<{ invoice_id?: string }> }) {
+  const { invoice_id } = await searchParams
   const supabase = createServerClientComponent()
 
-  if (searchParams.invoice_id) {
+  if (invoice_id) {
     const { data: invoice } = await supabase
       .from('invoices')
       .select('*')
-      .eq('saya_bayar_id', searchParams.invoice_id)
+      .eq('saya_bayar_id', invoice_id)
       .single()
 
     if (invoice?.status === 'paid') {
