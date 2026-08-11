@@ -1,12 +1,12 @@
-import { createBrowserClient } from '@supabase/ssr'
+import { createServerClient } from '@supabase/ssr'
 import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
 import { Database } from '@/types/supabase'
 
-async function createClientWithCookies() {
+async function createServerClientWithCookies() {
   const cookieStore = await cookies()
 
-  return createBrowserClient<Database>(
+  return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
@@ -15,9 +15,15 @@ async function createClientWithCookies() {
           return cookieStore.getAll()
         },
         setAll(cookiesToSet: Array<{name: string, value: string, options: any}>) {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            cookieStore.set(name, value, options)
-          )
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            )
+          } catch {
+            // The `setAll` method was called from a Server Component.
+            // This can be ignored if you have middleware refreshing
+            // user sessions.
+          }
         },
       },
     }
@@ -34,7 +40,7 @@ export async function signIn(formData: FormData) {
     throw new Error('Email and password are required')
   }
 
-  const supabase = await createClientWithCookies()
+  const supabase = await createServerClientWithCookies()
 
   const { error } = await supabase.auth.signInWithPassword({
     email,
@@ -59,7 +65,7 @@ export async function signUp(formData: FormData) {
     throw new Error('All fields are required')
   }
 
-  const supabase = await createClientWithCookies()
+  const supabase = await createServerClientWithCookies()
 
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -85,7 +91,7 @@ export async function signUp(formData: FormData) {
 export async function signOut() {
   'use server'
 
-  const supabase = await createClientWithCookies()
+  const supabase = await createServerClientWithCookies()
   await supabase.auth.signOut()
   redirect('/')
 }
