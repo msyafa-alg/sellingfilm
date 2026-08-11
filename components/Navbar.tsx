@@ -1,12 +1,16 @@
-// Navbar Component
-
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { User, LogOut } from 'lucide-react'
 
 export default async function Navbar() {
-  const supabase = createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  let user = null
+  try {
+    const supabase = createClient()
+    const { data: { user: userData } } = await supabase.auth.getUser()
+    user = userData
+  } catch (e) {
+    // Static generation - skip auth check
+  }
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-slate-800 bg-slate-950/80 backdrop-blur-md">

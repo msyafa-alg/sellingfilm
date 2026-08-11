@@ -1,9 +1,7 @@
 import { createServerClientComponent } from '@/lib/supabase/server'
 
 export default async function LogoutPage() {
-  'use server'
-
-  const supabase = createServerClientComponent()
+  const supabase = await createServerClientComponent()
   await supabase.auth.signOut()
 
   return null
