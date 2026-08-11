@@ -1,5 +1,3 @@
-// Supabase Auth Hooks
-
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
@@ -10,6 +8,7 @@ export function useUser() {
 
   useEffect(() => {
     const supabase = createClient()
+    if (!supabase) return
 
     const getUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
@@ -38,6 +37,7 @@ export function useSession() {
 
   useEffect(() => {
     const supabase = createClient()
+    if (!supabase) return
 
     const getSession = async () => {
       const { data: { session } } = await supabase.auth.getSession()
