@@ -1,11 +1,9 @@
-// Checkout Page
-
 import { requireAuth } from '@/lib/supabase/auth'
 import { getTier, createInvoice } from '@/lib/supabase/db-actions'
 import { createServerClientComponent } from '@/lib/supabase/server'
 import QRCode from 'qrcode.react'
 import { Clock } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import CountdownTimer from './components/CountdownTimer'
 
 export default async function CheckoutPage({ params }: { params: { tierId: string } }) {
   const tier = await getTier(params.tierId)
@@ -100,31 +98,4 @@ export default async function CheckoutPage({ params }: { params: { tierId: strin
       </div>
     </div>
   )
-}
-
-function CountdownTimer({ expiresAt }: { expiresAt: Date }) {
-  const [timeLeft, setTimeLeft] = useState<string>('')
-
-  useEffect(() => {
-    const calculateTimeLeft = () => {
-      const now = new Date()
-      const diff = expiresAt.getTime() - now.getTime()
-
-      if (diff <= 0) {
-        setTimeLeft('Expired')
-        return
-      }
-
-      const minutes = Math.floor(diff / (1000 * 60))
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000)
-
-      setTimeLeft(`${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`)
-    }
-
-    calculateTimeLeft()
-    const timer = setInterval(calculateTimeLeft, 1000)
-    return () => clearInterval(timer)
-  }, [expiresAt])
-
-  return <span className="font-mono text-white">{timeLeft}</span>
 }
