@@ -70,8 +70,8 @@ export async function createInvoice(
     customer_email: user.email,
     amount: tier.price,
     description: `Pembelian Tier ${tier.name} - lordarky.syafapnl.biz.id`,
-    channel_preference: 'client',
-    payment_method: 'qris',
+    channel_preference: 'client' as const,
+    payment_method: 'qris' as const,
     redirect_url: redirectUrl,
   }
 
