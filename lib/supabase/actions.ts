@@ -48,7 +48,7 @@ export async function signIn(formData: FormData) {
   })
 
   if (error) {
-    throw new Error(error.message)
+    redirect(`/login?error=${encodeURIComponent('Email atau password salah.')}`)
   }
 
   redirect('/')
@@ -79,12 +79,15 @@ export async function signUp(formData: FormData) {
 
   if (error) {
     console.error('Signup error:', error)
-    throw new Error(error.message.includes('already registered') || error.message.includes('User already') 
-      ? 'Email sudah terdaftar, silakan login.' 
-      : error.message)
+    const message =
+      error.message.includes('rate limit')
+        ? 'Terlalu banyak percobaan. Coba lagi dalam beberapa menit.'
+        : error.message.includes('already registered') || error.message.includes('User already')
+          ? 'Email sudah terdaftar, silakan login.'
+          : 'Pendaftaran gagal. Coba lagi.'
+    redirect(`/signup?error=${encodeURIComponent(message)}`)
   }
 
-  // Jika email confirmation diaktifkan, user harus konfirmasi via email
   redirect('/login')
 }
 

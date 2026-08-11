@@ -3,7 +3,13 @@
 import { signUp } from '@/lib/supabase/actions'
 import Link from 'next/link'
 
-export default function SignupPage() {
+export default async function SignupPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>
+}) {
+  const { error } = await searchParams
+
   return (
     <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
       <div className="max-w-md w-full space-y-8">
@@ -13,6 +19,12 @@ export default function SignupPage() {
             Join Lordarky and start your programming journey
           </p>
         </div>
+
+        {error && (
+          <div className="bg-red-950/50 border border-red-800 text-red-400 rounded-lg px-4 py-3 text-sm">
+            {error}
+          </div>
+        )}
 
         <form className="space-y-6">
           <div>

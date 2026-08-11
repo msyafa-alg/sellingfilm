@@ -3,7 +3,13 @@
 import { signIn } from '@/lib/supabase/actions'
 import Link from 'next/link'
 
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>
+}) {
+  const { error } = await searchParams
+
   return (
     <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
       <div className="max-w-md w-full space-y-8">
@@ -13,6 +19,12 @@ export default function LoginPage() {
             Enter your credentials to access your account
           </p>
         </div>
+
+        {error && (
+          <div className="bg-red-950/50 border border-red-800 text-red-400 rounded-lg px-4 py-3 text-sm">
+            {error}
+          </div>
+        )}
 
         <form className="space-y-6">
           <div>
