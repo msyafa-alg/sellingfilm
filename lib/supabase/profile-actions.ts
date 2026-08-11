@@ -1,10 +1,9 @@
-import { cookies } from 'next/headers'
-import { createServerClient } from '@/lib/supabase/server'
+import { createServerClientComponent } from '@/lib/supabase/server'
 
 export async function updateProfile(fullName: string) {
   'use server'
 
-  const supabase = createServerClient()
+  const supabase = await createServerClientComponent()
 
   const { data: { user }, error: userError } = await supabase.auth.getUser()
 
