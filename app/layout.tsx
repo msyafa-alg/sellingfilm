@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/Navbar'
@@ -9,6 +9,9 @@ export const metadata: Metadata = {
   title: 'Lordarky Course Platform',
   description: 'Premium programming video course platform',
   manifest: '/manifest.json',
+}
+
+export const viewport: Viewport = {
   themeColor: '#0f172a',
 }
 
