@@ -58,7 +58,7 @@ export async function createInvoice(
 ) {
   'use server'
 
-  const { default: SayaBayarClient } = await import('@/lib/saya-bayar/client')
+  const { SayaBayarClient } = await import('@/lib/saya-bayar/client')
   const sayaBayar = new SayaBayarClient(process.env.SAYA_BAYAR_API_KEY!)
   
   const supabase = await createServerClientComponent()
