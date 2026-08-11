@@ -1,12 +1,10 @@
-// Payment API Routes
-
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClientComponent } from '@/lib/supabase/server'
 import { SayaBayarClient } from '@/lib/saya-bayar/client'
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createServerClientComponent()
+    const supabase = await createServerClientComponent()
 
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 

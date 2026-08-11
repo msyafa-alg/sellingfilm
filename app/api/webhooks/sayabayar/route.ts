@@ -1,5 +1,3 @@
-// Webhook API Route - Saya Bayar Payment Gateway
-
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClientComponent } from '@/lib/supabase/server'
 
@@ -34,18 +32,16 @@ export async function POST(request: NextRequest) {
     const payload = JSON.parse(rawBody)
     const { event, data } = payload
 
-    const supabase = createServerClientComponent()
+    const supabase = await createServerClientComponent()
 
     if (event === 'invoice.paid') {
       const invoice = data
 
-      // Update invoice status
       await supabase
         .from('invoices')
         .update({ status: 'paid' })
         .eq('saya_bayar_id', invoice.id)
 
-      // Get invoice details
       const { data: invoiceData, error: invoiceError } = await supabase
         .from('invoices')
         .select('*')
@@ -59,7 +55,6 @@ export async function POST(request: NextRequest) {
         )
       }
 
-      // Get tier details
       const { data: tier, error: tierError } = await supabase
         .from('tiers')
         .select('*')
@@ -73,11 +68,9 @@ export async function POST(request: NextRequest) {
         )
       }
 
-      // Calculate expiry date (1 year from now)
       const expiresAt = new Date()
       expiresAt.setFullYear(expiresAt.getFullYear() + 1)
 
-      // Create or update subscription
       const { error: subscriptionError } = await supabase
         .from('subscriptions')
         .upsert({
