@@ -1,14 +1,13 @@
-// Course/Video Player Page
-
 import { requireActiveSubscription } from '@/lib/supabase/auth'
 import { createServerClientComponent } from '@/lib/supabase/server'
 import { getTier } from '@/lib/supabase/db-actions'
 import { Play, Video, Calendar, Clock } from 'lucide-react'
 
-export default async function CoursePage({ params }: { params: { tierId: string } }) {
-  await requireActiveSubscription(params.tierId)
+export default async function CoursePage({ params }: { params: Promise<{ tierId: string }> }) {
+  const { tierId } = await params
+  await requireActiveSubscription(tierId)
 
-  const tier = await getTier(params.tierId)
+  const tier = await getTier(tierId)
   
   if (!tier) {
     return (
