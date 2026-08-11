@@ -1,8 +1,28 @@
-// Auth UI Components
-
-import { createClient } from '@/lib/supabase/client'
+import { createBrowserClient } from '@supabase/ssr'
 import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
+import { Database } from '@/types/supabase'
+
+function createClientWithCookies() {
+  const cookieStore = cookies()
+
+  return createBrowserClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll()
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) =>
+            cookieStore.set(name, value, options)
+          )
+        },
+      },
+    }
+  )
+}
 
 export async function signIn(formData: FormData) {
   'use server'
@@ -14,7 +34,7 @@ export async function signIn(formData: FormData) {
     throw new Error('Email and password are required')
   }
 
-  const supabase = createClient()
+  const supabase = createClientWithCookies()
 
   const { error } = await supabase.auth.signInWithPassword({
     email,
@@ -39,7 +59,7 @@ export async function signUp(formData: FormData) {
     throw new Error('All fields are required')
   }
 
-  const supabase = createClient()
+  const supabase = createClientWithCookies()
 
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -65,7 +85,7 @@ export async function signUp(formData: FormData) {
 export async function signOut() {
   'use server'
 
-  const supabase = createClient()
+  const supabase = createClientWithCookies()
   await supabase.auth.signOut()
   redirect('/')
 }
