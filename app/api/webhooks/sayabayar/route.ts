@@ -1,5 +1,3 @@
-# Webhook API Route - PayGet MZ Payment Gateway
-
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClientComponent } from '@/lib/supabase/server'
 
