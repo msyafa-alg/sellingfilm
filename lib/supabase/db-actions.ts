@@ -102,7 +102,13 @@ export async function createInvoice(
     throw new Error(insertError.message)
   }
 
-  return invoice
+  return {
+    id: invoice.id,
+    invoice_number: invoice.invoice_number,
+    qris_string: invoice.payment_channel.qris_string,
+    payment_url: invoice.payment_channel.payment_url,
+    expires_at: invoice.expires_at,
+  }
 }
 
 export async function createSubscription(
