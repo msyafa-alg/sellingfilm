@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerClientComponent } from '@/lib/supabase/server'
+import { createClient } from '@supabase/supabase-js'
 import { PayGetClient } from '@/lib/payget/client'
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createServerClientComponent()
-
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
     if (authError || !user) {
