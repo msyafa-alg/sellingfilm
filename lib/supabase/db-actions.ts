@@ -1,8 +1,8 @@
 import { cookies } from 'next/headers'
-import { createServerClient } from '@/lib/supabase/server'
+import { createServerClientComponent } from '@/lib/supabase/server'
 
 export async function getTier(tierId: string) {
-  const supabase = createServerClient()
+  const supabase = await createServerClientComponent()
   
   const { data: tier, error } = await supabase
     .from('tiers')
@@ -18,7 +18,7 @@ export async function getTier(tierId: string) {
 }
 
 export async function getTiers() {
-  const supabase = createServerClient()
+  const supabase = await createServerClientComponent()
   
   const { data: tiers, error } = await supabase
     .from('tiers')
@@ -33,7 +33,7 @@ export async function getTiers() {
 }
 
 export async function getSubscription(userId: string) {
-  const supabase = createServerClient()
+  const supabase = await createServerClientComponent()
   
   const { data: subscription, error } = await supabase
     .from('subscriptions')
@@ -61,7 +61,7 @@ export async function createInvoice(
   const { default: SayaBayarClient } = await import('@/lib/saya-bayar/client')
   const sayaBayar = new SayaBayarClient(process.env.SAYA_BAYAR_API_KEY!)
   
-  const supabase = createServerClient()
+  const supabase = await createServerClientComponent()
 
   const redirectUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/payment/success`
 
@@ -112,7 +112,7 @@ export async function createSubscription(
 ) {
   'use server'
 
-  const supabase = createServerClient()
+  const supabase = await createServerClientComponent()
 
   const { error } = await supabase
     .from('subscriptions')
